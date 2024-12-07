@@ -8,6 +8,7 @@ defmodule ElixirSynth do
 
   def hello do
     {:ok, synth} = MIDISynth.start_link([])
+    Process.sleep(100)
 
     Enum.each(1..8, fn _ ->
       play(synth)
@@ -17,13 +18,13 @@ defmodule ElixirSynth do
   end
 
   def play(synth) do
-    t = notes(@hi, 100, 8, synth)
-    t2 = notes(@bass_drum, 400, 4, synth)
-    t3 = notes(@snare, 400, 2, synth, 600)
+    hi_task = notes(@hi, 100, 8, synth)
+    bass_drum_task = notes(@bass_drum, 400, 4, synth)
+    snare_task = notes(@snare, 400, 2, synth, 600)
 
-    Task.await(t)
-    Task.await(t2)
-    Task.await(t3)
+    Task.await(hi_task)
+    Task.await(bass_drum_task)
+    Task.await(snare_task)
   end
 
   def notes(note, time, conut, synth, before \\ 0) do
